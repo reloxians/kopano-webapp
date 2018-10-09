@@ -927,21 +927,7 @@ If it is the first time this attendee has proposed a new date/time, increment th
 						// add owner to recipient table
 						$recips = array();
 						$this->addOrganizer($props, $recips);
-
-						if($isDelegate) {
-							/**
-							 * If user is delegate then remove that user from recipienttable of the MR.
-							 * and delegate MR mail doesn't contain any of the attendees in recipient table.
-							 * So, other required and optional attendees are added from
-							 * toattendeesstring and ccattendeesstring properties.
-							 */
-							$this->setRecipsFromString($recips, $messageprops[$this->proptags['toattendeesstring']], MAPI_TO);
-							$this->setRecipsFromString($recips, $messageprops[$this->proptags['ccattendeesstring']], MAPI_CC);
-							mapi_message_modifyrecipients($calmsg, 0, $recips);
-						} else {
-							mapi_message_modifyrecipients($calmsg, MODRECIP_ADD, $recips);
-						}
-
+						mapi_message_modifyrecipients($calmsg, MODRECIP_ADD, $recips);
 						mapi_savechanges($calmsg);
 
 						// Move the message to the wastebasket
@@ -1008,20 +994,7 @@ If it is the first time this attendee has proposed a new date/time, increment th
 							$recips = mapi_table_queryallrows($reciptable, $this->recipprops);
 
 						$this->addOrganizer($props, $recips);
-
-						if($isDelegate) {
-							/**
-							 * If user is delegate then remove that user from recipienttable of the MR.
-							 * and delegate MR mail doesn't contain any of the attendees in recipient table.
-							 * So, other required and optional attendees are added from
-							 * toattendeesstring and ccattendeesstring properties.
-							 */
-							$this->setRecipsFromString($recips, $messageprops[$this->proptags['toattendeesstring']], MAPI_TO);
-							$this->setRecipsFromString($recips, $messageprops[$this->proptags['ccattendeesstring']], MAPI_CC);
-							mapi_message_modifyrecipients($new, 0, $recips);
-						} else {
-							mapi_message_modifyrecipients($new, MODRECIP_ADD, $recips);
-						}
+						mapi_message_modifyrecipients($new, MODRECIP_ADD, $recips);
 						mapi_savechanges($new);
 
 						$props = mapi_getprops($new, array(PR_ENTRYID));
